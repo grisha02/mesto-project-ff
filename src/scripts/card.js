@@ -7,8 +7,8 @@ export function createCard(data, deleteCard, likeCard, openModalImage) {
   const deleteButton = cardElement.querySelector('.card__delete-button');
   const btnLike = cardElement.querySelector('.card__like-button');
 
-  let cardImage = cardElement.querySelector('.card__image');
-  let cardTitle = cardElement.querySelector('.card__title');
+  const cardImage = cardElement.querySelector('.card__image');
+  const cardTitle = cardElement.querySelector('.card__title');
 
   cardImage.src = data.link;
   cardImage.alt = data.name;

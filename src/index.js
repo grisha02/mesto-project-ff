@@ -3,13 +3,12 @@ import './pages/index.css';
 
 import { initialCards } from './scripts/cards.js';
 
-import { openModal, closeModal } from './scripts/modal.js';
+import { openModal, closeModal, closeModalOnClickOverlay } from './scripts/modal.js';
 
 import { createCard, deleteCard, likeCard } from './scripts/card.js';
 
 //поиск DOM элементов
 const cardTemplate = document.querySelector('#card-template').content;
-
 const placesList = document.querySelector('.places__list');
 
 const btnEditProfile = document.querySelector('.profile__edit-button');
@@ -18,7 +17,7 @@ const popupTypeEdit = document.querySelector('.popup_type_edit');
 const btnAddNewCard = document.querySelector('.profile__add-button');
 const popupTypeNewCard = document.querySelector('.popup_type_new-card');
 
-const btnPopupClose = document.querySelectorAll('.popup__close');
+const btnPopupCloses = document.querySelectorAll('.popup__close');
 
 const formElement = document.forms['edit-profile'];
 const nameInput = document.querySelector('.popup__input_type_name');
@@ -31,7 +30,11 @@ const formNewPlace = document.forms['new-place'];
 const namePlaceInput = document.forms['new-place']['place-name'];
 const photoLinkPlace = document.forms['new-place']['link'];
 
-const popupAnimation = document.querySelectorAll('.popup');
+const popupTypeImage = document.querySelector('.popup_type_image');
+const popupImage = popupTypeImage.querySelector('.popup__image');
+const popupCaption = popupTypeImage.querySelector('.popup__caption');
+
+const popupAnimations = document.querySelectorAll('.popup');
 
 //все экспорты
 export {
@@ -46,12 +49,12 @@ function renderInitialCards(initialCards) {
   });
 }
 
-//функция обработчик события открытия попапа создания карточки
+//обработчик события открытия попапа создания карточки
 btnAddNewCard.addEventListener('click', () => {
   openModal(popupTypeNewCard);
 });
 
-//функция обработчик события открытия попапа редактирования профиля
+//обработчик события открытия попапа редактирования профиля
 btnEditProfile.addEventListener('click', () => {
   const nameProfileData = nameProfile.textContent;
   const editName = formElement.elements.name;
@@ -64,8 +67,8 @@ btnEditProfile.addEventListener('click', () => {
   openModal(popupTypeEdit);
 });
 
-//функция обработчик события закрытия попапа
-btnPopupClose.forEach((button) => {
+//обработчик события закрытия попапа
+btnPopupCloses.forEach((button) => {
   button.addEventListener('click', () => {
     closeModal(button.closest('.popup_is-opened'));
   });
@@ -92,26 +95,12 @@ function handleFormSubmitNewPlace(evt) {
 
   const nameValue = namePlaceInput.value;
   const placeValue = photoLinkPlace.value;
+  const data = {
+    name: nameValue,
+    link: placeValue
+  };
 
-  const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true);
-  cardElement.querySelector('.card__image').src = placeValue;
-  cardElement.querySelector('.card__image').alt = nameValue;
-  cardElement.querySelector('.card__title').textContent = nameValue;
-
-  const deleteButton = cardElement.querySelector('.card__delete-button');
-  deleteButton.addEventListener('click', () => {
-    deleteCard(cardElement);
-  });
-
-  const btnLike = cardElement.querySelector('.card__like-button');
-  btnLike.addEventListener('click', likeCard);
-
-  const cardImage = cardElement.querySelector('.card__image');
-  cardImage.addEventListener('click', () => {
-    openModalImage(placeValue, nameValue);
-  });
-
-  placesList.prepend(cardElement);
+  placesList.prepend(createCard(data, deleteCard, likeCard, openModalImage));
 
   closeModal(popupTypeNewCard);
   formNewPlace.reset();
@@ -121,10 +110,6 @@ formNewPlace.addEventListener('submit', handleFormSubmitNewPlace);
 
 //функция открытия попапа с картинкой
 function openModalImage(link, name) {
-  const popupTypeImage = document.querySelector('.popup_type_image');
-  const popupImage = popupTypeImage.querySelector('.popup__image');
-  const popupCaption = popupTypeImage.querySelector('.popup__caption');
-
   popupImage.src = link;
   popupImage.alt = name;
   popupCaption.textContent = name;
@@ -133,9 +118,12 @@ function openModalImage(link, name) {
 }
 
 //анимированный попап
-popupAnimation.forEach((evt) => {
+popupAnimations.forEach((evt) => {
   evt.classList.add('popup_is-animated');
 });
 
 //вызов функции вывода карточек на страницу из массива
 renderInitialCards(initialCards);
+
+//вызов функции закрытия модального окна кликом на оверлей
+closeModalOnClickOverlay();
