@@ -1,2 +1,5 @@
 # Проектная работа Mesto
-https://github.com/grisha02/mesto-project-ff.git
+Alt-H1
+------
+*Mesto* - интерактивная страница, куда можно добавлять фотографии, удалять их и ставить лайки.  
+[Сервис место](https://grisha02.github.io/mesto-project-ff/)
