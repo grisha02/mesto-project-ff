@@ -71,8 +71,6 @@ function handleFormSubmit(evt) {
 
   popupEditProfile(nameValue, jobValue)
     .then(() => {
-      toggleButtonState(formElement, false);
-
       nameProfile.textContent = nameValue;
       jobProfile.textContent = jobValue;
 
@@ -80,6 +78,8 @@ function handleFormSubmit(evt) {
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
       toggleButtonState(formElement, false);
     });
 }
@@ -106,19 +106,18 @@ function handleFormSubmitNewPlace(evt) {
     .then(userData => {
       popupCreateCard(nameValue, placeValue)
         .then(data => {
-          toggleButtonState(formNewPlace, false);
-
           placesList.prepend(createCard(data, deleteCard, likeCard, openModalImage, userData._id));
           closeModal(popupTypeNewCard);
           formNewPlace.reset();
         })
         .catch(err => {
-          console.log('Произошла ошибка при создании карточки:', err);
-          toggleButtonState(formNewPlace, false);
+          console.log(err);
         });
     })
     .catch(err => {
       console.log(err);
+    })
+    .finally(() => {
       toggleButtonState(formNewPlace, false);
     });
 }
@@ -148,17 +147,17 @@ function handleFormSubmitEditAvatar(evt) {
   const linkAvatar = photoLinkAvatar.value;
 
   popupEditProfileAvatar(linkAvatar)
-   .then(() => {
-     toggleButtonState(formEditProfileAvatar, false);
+    .then(() => {
+      profileImage.style.backgroundImage = `url('${linkAvatar}')`;
 
-     profileImage.style.backgroundImage = `url('${linkAvatar}')`;
-
-     closeModal(popupTypeEditProfileImage);
-   })
-   .catch((err) => {
-     console.log(err);
-     toggleButtonState(formEditProfileAvatar, false);
-   });
+      closeModal(popupTypeEditProfileImage);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      toggleButtonState(formEditProfileAvatar, false);
+    });
 }
 
 formEditProfileAvatar.addEventListener('submit', handleFormSubmitEditAvatar);
