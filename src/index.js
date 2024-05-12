@@ -20,8 +20,6 @@ import {
 } from "./scripts/api.js";
 
 //поиск DOM элементов
-export const cardTemplate = document.querySelector("#card-template").content;
-
 const placesList = document.querySelector(".places__list");
 
 const btnEditProfile = document.querySelector(".profile__edit-button");
@@ -40,8 +38,8 @@ const nameProfile = document.querySelector(".profile__title");
 const jobProfile = document.querySelector(".profile__description");
 
 const formNewPlace = document.forms["new-place"];
-const namePlaceInput = document.forms["new-place"]["place-name"];
-const photoLinkPlace = document.forms["new-place"]["link"];
+const namePlaceInput = formNewPlace["place-name"];
+const photoLinkPlace = formNewPlace["link"];
 
 const popupTypeImage = document.querySelector(".popup_type_image");
 const popupImage = popupTypeImage.querySelector(".popup__image");
@@ -50,7 +48,8 @@ const popupCaption = popupTypeImage.querySelector(".popup__caption");
 const popups = document.querySelectorAll(".popup");
 
 const formEditProfileAvatar = document.forms["edit-profile-avatar"];
-const photoLinkAvatar = document.forms["edit-profile-avatar"]["link-avatar"];
+const photoLinkAvatar = formEditProfileAvatar["link-avatar"];
+
 const popupTypeEditProfileImage = document.querySelector(".popup_type_edit-profile");
 
 const profileImage = document.querySelector(".profile__image");
@@ -102,7 +101,7 @@ profileForm.addEventListener("submit", handleProfileFormSubmit);
 //обработчик события открытия попапа создания карточки
 btnAddNewCard.addEventListener("click", () => {
   openModal(popupTypeNewCard);
-
+  
   clearValidation(formNewPlace, validationConfig);
 });
 
@@ -136,12 +135,8 @@ formNewPlace.addEventListener("submit", handleFormSubmitNewPlace);
 
 //обработчик открытия попапа редактирования аватара профиля
 profileImage.addEventListener("click", () => {
-  getUserInformation().then((userData) => {
-    photoLinkAvatar.value = userData.avatar;
-
-    clearValidation(formEditProfileAvatar, validationConfig);
-  });
-
+  clearValidation(formEditProfileAvatar, validationConfig);
+  
   openModal(popupTypeEditProfileImage);
 });
 
@@ -158,6 +153,7 @@ function handleFormSubmitEditAvatar(evt) {
       profileImage.style.backgroundImage = `url('${linkAvatar}')`;
 
       closeModal(popupTypeEditProfileImage);
+      formEditProfileAvatar.reset();
     })
     .catch((err) => {
       console.log(err);

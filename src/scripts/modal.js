@@ -26,11 +26,10 @@ const closeModalOnEsc = (evt) => {
 
 //функция закрытия модального окна кликом на оверлей
 const closeModalOnClickOverlay = (evt) => {
-  const openedModal = document.querySelector(".popup_is-opened");
-  if (openedModal && evt.target === openedModal) {
-    closeModal(openedModal);
+  if (evt.target.classList.contains("popup_is-opened")) {
+    closeModal(evt.target);
   }
 };
 
 //все экспорты
-export { openModal, closeModal, closeModalOnClickOverlay };
+export { openModal, closeModal };

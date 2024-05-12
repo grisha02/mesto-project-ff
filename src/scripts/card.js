@@ -1,6 +1,7 @@
 //все импорты
 import { deleteMyCard, putLikeCard, deleteLikeCard } from "./api.js";
-import { cardTemplate } from "..";
+
+const cardTemplate = document.querySelector("#card-template").content;
 
 //функция создания карточки
 export function createCard(data, deleteCard, likeCard, openModalImage, userId) {
